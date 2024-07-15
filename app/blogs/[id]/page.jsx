@@ -2,6 +2,7 @@
 
 import { assets, blog_data } from '@/assets/assets';
 import Footer from '@/components/Footer';
+import axios from 'axios';
 import Image from 'next/image';
 import Link from 'next/link';
 import React, { useEffect, useState } from 'react';
@@ -9,14 +10,17 @@ import React, { useEffect, useState } from 'react';
 const page = ({ params }) => {
   const [data, setData] = useState(null);
 
-  const fetchBlogData = () => {
-    for (let i = 0; i < blog_data.length; i++) {
-      if (blog_data[i].id === Number(params.id)) {
-        setData(blog_data[i]);
-        console.log(blog_data[i]);
-        break;
-      }
-    }
+  const fetchBlogData = async () => {
+    // for (let i = 0; i < blog_data.length; i++) {
+    //   if (blog_data[i].id === Number(params.id)) {
+    //     setData(blog_data[i]);
+    //     console.log(blog_data[i]);
+    //     break;
+    //   }
+    // }
+
+    const response = await axios.get('/api/blog', { params: { id: params.id } });
+    setData(response.data);
   };
 
   useEffect(() => {
@@ -37,7 +41,7 @@ const page = ({ params }) => {
         <div className='text-center my-24'>
           <h1 className='text-2xl sm:text-5xl font-semibold max-w-[700x] mx-auto'>{data.title}</h1>
           <Image
-            src={data.author_img}
+            src={data.authorImg}
             alt=''
             width={60}
             height={60}
